@@ -2,7 +2,7 @@
 
 import  xadmin
 
-from .models import project
+from .models import Project,UserProject,Task,File,Discussion,Reply
 
 
 class projectAdmin(object):
@@ -11,5 +11,32 @@ class projectAdmin(object):
     list_filter = ['id', 'name', 'desc']
 
 
-xadmin.site.register(project,projectAdmin)
+xadmin.site.register(Project,projectAdmin)
 
+
+
+class UserProjectAdmin(object):
+    pass
+
+xadmin.site.register(UserProject,UserProjectAdmin)
+
+
+class FileAdmin(object):
+    pass
+
+xadmin.site.register(File,FileAdmin)
+
+class TaskAdmin(object):
+    pass
+
+xadmin.site.register(Task,TaskAdmin)
+
+class DiscussionAdmin(object):
+    pass
+
+xadmin.site.register(Discussion,DiscussionAdmin)
+
+class ReplyAdmin(object):
+    pass
+
+xadmin.site.register(Reply,ReplyAdmin)
