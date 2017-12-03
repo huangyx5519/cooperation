@@ -3,7 +3,17 @@ from __future__ import unicode_literals
 from .models import UserProfile
 from rest_framework import viewsets
 from .serializers import UserProfileSerializer
+from rest_framework import filters
+from rest_framework.pagination import PageNumberPagination
+from django_filters.rest_framework import DjangoFilterBackend
 
+from .filters import UserProfileFilter
+
+# 分页
+class UserProfilePagination(PageNumberPagination):
+    page_size = 10
+    page_size_query_param = 'page_size'
+    max_page_size = 100
 
 class UserProfileViewSet(viewsets.ModelViewSet):
     """
@@ -11,3 +21,13 @@ class UserProfileViewSet(viewsets.ModelViewSet):
     """
     queryset = UserProfile.objects.all().order_by('-date_joined')
     serializer_class = UserProfileSerializer
+    pagination_class = UserProfilePagination
+    filter_backends = (DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter)
+    filter_class = UserProfileFilter
+    search_fields = ('username',)
+    ordering_fields = ('username',)
+
+
+
+
+

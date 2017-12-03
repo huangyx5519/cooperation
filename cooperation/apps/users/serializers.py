@@ -5,8 +5,10 @@ from  .models import UserProfile
 from rest_framework import serializers
 
 
-class UserProfileSerializer(serializers.HyperlinkedModelSerializer):
+class UserProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserProfile
-        fields = ('nick_name', 'gender', 'address', 'mobile', 'image', 'username')
+        # fields = ('nick_name', 'gender', 'address', 'mobile', 'image', 'username',)
+        fields = "__all__"
+
 
