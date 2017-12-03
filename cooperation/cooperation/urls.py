@@ -17,16 +17,19 @@ from django.conf.urls import url,include
 from django.conf.urls import url, include
 from rest_framework import routers
 from rest_framework.documentation import include_docs_urls
+from rest_framework.authtoken import views as authviews
 from users import views
 import xadmin
 
 # from django.contrib import admin
 router = routers.DefaultRouter()
 router.register(r'users', views.UserProfileViewSet)
+router.register(r'userreg', views.UserViewset)
 
 
 
 urlpatterns = [
+    url(r'^api-token-auth/', authviews.obtain_auth_token),
     url(r'^xadmin/', xadmin.site.urls),
     url(r'^', include(router.urls)),
     url(r'docs/',include_docs_urls(title="cooperation")),
