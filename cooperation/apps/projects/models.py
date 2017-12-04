@@ -8,9 +8,9 @@ from users.models import UserProfile
 
 
 class Project(models.Model):
-    title = models.TextField(verbose_name=u"项目名称")
+    title = models.CharField(verbose_name=u"项目名称",max_length=50,default="")
     sponsor = models.ForeignKey(UserProfile, verbose_name=u"项目负责人")
-    desc = models.TextField(verbose_name=u"项目描述")
+    desc = models.CharField(verbose_name=u"项目描述",max_length=500,default="")
     create_time = models.DateTimeField(default=datetime.now, verbose_name=u"创建时间")
 
     class Meta:

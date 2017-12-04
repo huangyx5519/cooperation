@@ -14,4 +14,4 @@ class IsOwnerOrReadOnly(permissions.BasePermission):
             return True
 
         # Instance must have an attribute named `owner`.
-        return obj.sponsor == request.sponsor
+        return obj.sponsor == request.user

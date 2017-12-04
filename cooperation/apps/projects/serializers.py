@@ -5,30 +5,26 @@ from rest_framework import serializers
 from rest_framework.validators import UniqueValidator
 from django.contrib.auth.hashers import make_password
 from  .models import *
+from users.models import UserProfile
+from users.serializers import UserProfileSerializer
 
-from users.serializers import UserProfile
+
+class UserProfileInProSerializer(serializers.ModelSerializer):
+
+
+    class Meta:
+        model = UserProfile
+        fields = ("id",)
+
 
 class ProjectSerializer(serializers.ModelSerializer):
+    # sponsor = UserProfileInProSerializer()
+    sponsor = serializers.HiddenField(
+        default=serializers.CurrentUserDefault()
+    )
 
     class Meta:
         model = Project
-        fields = "__all__"
+        fields = ("title","desc","sponsor")
 
-#
-# class ProjectSerializer(serializers.ModelSerializer):
-#     class Meta:
-#         model = Project
-#         fields = "__all__"
-#
-#
-# class ProjectSerializer(serializers.ModelSerializer):
-#     class Meta:
-#         model = Project
-#         fields = "__all__"
-#
-#
-# class ProjectSerializer(serializers.ModelSerializer):
-#     class Meta:
-#         model = Project
-#         fields = "__all__"
 

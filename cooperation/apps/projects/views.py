@@ -15,14 +15,20 @@ from .serializers import *
 from utils.permissions import IsOwnerOrReadOnly
 
 
+# 展示
+
 class ProjectViewSet(viewsets.ModelViewSet):
     """
     API endpoint that allows users to be viewed or edited.
     """
-    queryset = Project.objects.all().order_by('-create_time')
+    queryset = Project.objects.all()
     serializer_class = ProjectSerializer
     authentication_classes = (TokenAuthentication,)
-    permission_classes = (IsOwnerOrReadOnly, )
-    filter_backends = (DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter)
-    search_fields = ('name',)
-    ordering_fields = ('create_time',)
+
+    def get_queryset(self):
+        return Project.objects.filter(sponsor=self.request.user)
+
+    # permission_classes = (IsOwnerOrReadOnly, )
+    # filter_backends = (DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter)
+    # search_fields = ('name',)
+    # ordering_fields = ('create_time',)
