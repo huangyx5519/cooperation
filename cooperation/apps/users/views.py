@@ -7,6 +7,7 @@ from rest_framework import filters
 from rest_framework.pagination import PageNumberPagination
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.authentication import TokenAuthentication
+from rest_framework.permissions import IsAdminUser
 
 from .filters import UserProfileFilter
 
@@ -22,7 +23,8 @@ class UserProfileViewSet(viewsets.ModelViewSet):
     """
     queryset = UserProfile.objects.all().order_by('-date_joined')
     serializer_class = UserProfileSerializer
-    # authentication_classes = (TokenAuthentication,)
+    authentication_classes = (TokenAuthentication,)
+    # permission_classes = (IsAdminUser,)
     pagination_class = UserProfilePagination
     filter_backends = (DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter)
     filter_class = UserProfileFilter
