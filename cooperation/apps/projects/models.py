@@ -8,10 +8,8 @@ from users.models import UserProfile
 
 
 class Project(models.Model):
-
-    name = models.CharField(max_length=50, verbose_name=u"项目名称")
-    sponsor = models.ForeignKey(UserProfile, verbose_name=u"项目负责人")
     title = models.TextField(verbose_name=u"项目名称")
+    sponsor = models.ForeignKey(UserProfile, verbose_name=u"项目负责人")
     desc = models.TextField(verbose_name=u"项目描述")
     create_time = models.DateTimeField(default=datetime.now, verbose_name=u"创建时间")
 

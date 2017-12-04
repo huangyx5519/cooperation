@@ -18,13 +18,15 @@ from django.conf.urls import url, include
 from rest_framework import routers
 from rest_framework.documentation import include_docs_urls
 from rest_framework.authtoken import views as authviews
-from users import views
+from users import views as userView
+from projects import views as projectView
 import xadmin
 
 # from django.contrib import admin
 router = routers.DefaultRouter()
-router.register(r'users', views.UserProfileViewSet)
-router.register(r'signup', views.UserSignUpViewset)
+router.register(r'users', userView.UserProfileViewSet)
+router.register(r'signup', userView.UserSignUpViewset)
+router.register(r'project', projectView.ProjectViewSet)
 
 
 
