@@ -33,7 +33,5 @@ class ProjectViewSet(viewsets.ModelViewSet):
     # def get_queryset(self):
     #     return Project.objects.filter(sponsor=self.request.user)
 
-
-    # filter_backends = (DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter)
     # search_fields = ('name',)
     # ordering_fields = ('create_time',)

@@ -6,9 +6,9 @@ from .models import Project,UserProject,Task,File,Discussion,Reply
 
 
 class projectAdmin(object):
-    list_display = ['id','name', 'desc']
-    search_fields = ['id', 'name', 'desc']
-    list_filter = ['id', 'name', 'desc']
+    list_display = ['id','title','desc']
+    search_fields = ['id','title','desc']
+    list_filter = ['id','title','desc']
 
 
 xadmin.site.register(Project,projectAdmin)
