@@ -24,11 +24,12 @@ import xadmin
 # from django.contrib import admin
 router = routers.DefaultRouter()
 router.register(r'users', views.UserProfileViewSet)
-router.register(r'userreg', views.UserViewset)
+router.register(r'signup', views.UserSignUpViewset)
 
 
 
 urlpatterns = [
+    url(r'^signin/', authviews.obtain_auth_token),
     url(r'^api-token-auth/', authviews.obtain_auth_token),
     url(r'^xadmin/', xadmin.site.urls),
     url(r'^', include(router.urls)),
