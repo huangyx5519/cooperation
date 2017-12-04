@@ -24,11 +24,16 @@ class ProjectViewSet(viewsets.ModelViewSet):
     queryset = Project.objects.all()
     serializer_class = ProjectSerializer
     authentication_classes = (TokenAuthentication,)
+    permission_classes = (IsOwnerOrReadOnly,)
+    filter_backends = (DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter)
+    # search_fields = ('title',)
+    search_fields= ('sponsor__id',)
+    #外键属性双下划线，这里应该使用fiter更好，后面改
 
-    def get_queryset(self):
-        return Project.objects.filter(sponsor=self.request.user)
+    # def get_queryset(self):
+    #     return Project.objects.filter(sponsor=self.request.user)
 
-    # permission_classes = (IsOwnerOrReadOnly, )
+
     # filter_backends = (DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter)
     # search_fields = ('name',)
     # ordering_fields = ('create_time',)
