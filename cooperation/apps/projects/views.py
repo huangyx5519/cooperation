@@ -25,21 +25,19 @@ class ProjectViewSet(viewsets.ModelViewSet):
     authentication_classes = (TokenAuthentication,)
     permission_classes = (ProjectPermission,)
     filter_backends = (DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter)
-    # search_fields = ('title',)
-    # search_fields= ('sponsor__id',)
-    #外键属性双下划线，这里应该使用fiter更好，后面改
+    filter_fields = ("sponsor__id",)
     ordering_fields = ('create_time',)
 
 
     def get_serializer_class(self):
+        #获取详情
         if self.action == "retrieve":
             return ProjectDetailSerializer
         return ProjectSerializer
 
 
 
-class UserProjectViewset(mixins.CreateModelMixin, mixins.ListModelMixin, mixins.RetrieveModelMixin,
-                     mixins.DestroyModelMixin, viewsets.GenericViewSet):
+class UserProjectViewset(GenericViewSet,mixins.CreateModelMixin,mixins.DestroyModelMixin,mixins.ListModelMixin):
     """
     list:
         获取用户项目关系
@@ -49,14 +47,36 @@ class UserProjectViewset(mixins.CreateModelMixin, mixins.ListModelMixin, mixins.
         加入
     """
     queryset = UserProject.objects.all()
-    permission_classes = (IsAuthenticated, TakePartInPermission)
+    # permission_classes = (IsAuthenticated, TakePartInPermission)
     authentication_classes = (TokenAuthentication,)
-    # lookup_field = "goods_id"
+    filter_backends = (DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter)
+    filter_fields = ("project_id","member_id",)
 
-    def get_queryset(self):
-        return UserProject.objects.filter(member=self.request.user)
+    # def get_queryset(self):
+        # return UserProject.objects.filter(member=self.request.user)
+        # return UserProject
 
     def get_serializer_class(self):
         if self.action == "create":
-            return CreateUserProjectSerializer
-        return UserProjectSerializer
+            return UserProjectSerializer
+        return UserProjectDetailSerializer
+
+
+
+class FileViewSet(viewsets.ModelViewSet):
+    """
+    API endpoint that allows users to be viewed or edited.
+    """
+    queryset = File.objects.all()
+    authentication_classes = (TokenAuthentication,)
+    # permission_classes = (ProjectPermission,)
+    filter_backends = (DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter)
+
+    ordering_fields = ('create_time',)
+
+
+    def get_serializer_class(self):
+        #获取详情
+        if self.action == "retrieve":
+            return ProjectDetailSerializer
+        return ProjectSerializer
