@@ -71,12 +71,26 @@ class FileViewSet(viewsets.ModelViewSet):
     authentication_classes = (TokenAuthentication,)
     # permission_classes = (ProjectPermission,)
     filter_backends = (DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter)
-
-    ordering_fields = ('create_time',)
+    ordering_fields = ('upload_date',)
 
 
     def get_serializer_class(self):
-        #获取详情
-        if self.action == "retrieve":
-            return ProjectDetailSerializer
-        return ProjectSerializer
+        return FileSerializer
+
+
+class ProjectFileViewSet(viewsets.ModelViewSet):
+    """
+    API endpoint that allows users to be viewed or edited.
+    """
+
+    queryset = File.objects.all()
+    authentication_classes = (TokenAuthentication,)
+    # permission_classes = (ProjectPermission,)
+    filter_backends = (DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter)
+    ordering_fields = ('upload_date',)
+
+    def get_queryset(self):
+        re = self.request
+
+    def get_serializer_class(self):
+        return FileSerializer

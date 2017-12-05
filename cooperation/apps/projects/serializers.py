@@ -10,7 +10,7 @@ from rest_framework.validators import UniqueTogetherValidator
 class FileSerializer(serializers.ModelSerializer):
     class Meta:
         model = File
-        fields = ("title",)
+        fields = "__all__"
 
 class UserProjectDetailSerializer(serializers.ModelSerializer):
     member=UserRegSerializer()
