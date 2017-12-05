@@ -22,7 +22,7 @@ class ProjectViewSet(viewsets.ModelViewSet):
     API endpoint that allows users to be viewed or edited.
     """
     queryset = Project.objects.all()
-    serializer_class = ProjectSerializer
+    # serializer_class = ProjectSerializer
     authentication_classes = (TokenAuthentication,)
     permission_classes = (IsOwnerOrReadOnly,)
     filter_backends = (DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter)
@@ -30,8 +30,25 @@ class ProjectViewSet(viewsets.ModelViewSet):
     search_fields= ('sponsor__id',)
     #外键属性双下划线，这里应该使用fiter更好，后面改
 
+
+    def get_serializer_class(self):
+        if self.action == "retrieve":
+            return ProjectDetailSerializer
+        return ProjectSerializer
+
+
     # def get_queryset(self):
     #     return Project.objects.filter(sponsor=self.request.user)
 
     # search_fields = ('name',)
     # ordering_fields = ('create_time',)
+
+
+
+class ProjectListViewSet(mixins.ListModelMixin, GenericViewSet):
+    queryset = Project.objects.all()
+    serializer_class = ProjectSerializer
+
+class ProjectMemberListViewSet(GenericViewSet,mixins.RetrieveModelMixin):
+    queryset = Project.objects.all()
+    serializer_class = ProjectSerializer

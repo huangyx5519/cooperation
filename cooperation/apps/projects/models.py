@@ -23,7 +23,7 @@ class Project(models.Model):
 
 class UserProject(models.Model):
     member = models.ForeignKey(UserProfile, verbose_name=u"项目成员")
-    project = models.ForeignKey(Project, verbose_name=u"项目")
+    project = models.ForeignKey(Project, verbose_name=u"项目",related_name="members")
     take_time = models.DateTimeField(default=datetime.now, verbose_name=u"参与时间")
 
     class Meta:
@@ -53,7 +53,7 @@ class Task(models.Model):
 
 class File(models.Model):
     title = models.TextField(verbose_name=u"文件名称")
-    project_belong_to = models.ForeignKey(Project, verbose_name=u"所属项目")
+    project_belong_to = models.ForeignKey(Project, verbose_name=u"所属项目",related_name="files")
     url = models.TextField(verbose_name=u"文件路径")
     type = models.TextField(verbose_name=u"文件类型")
     upload_people = models.ForeignKey(UserProfile, verbose_name=u"上传者")
