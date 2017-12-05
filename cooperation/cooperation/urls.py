@@ -26,20 +26,24 @@ import xadmin
 router = routers.DefaultRouter()
 router.register(r'users', userView.UserProfileViewSet)
 router.register(r'signup', userView.UserSignUpViewset)
-router.register(r'project', projectView.ProjectViewSet)
+# router.register(r'project', projectView.ProjectViewSet)
 router.register(r'userproject', projectView.UserProjectViewset)
 router.register(r'file', projectView.FileViewSet)
-router.register(r'projectfile', projectView.ProjectFileViewSet)
+# router.register(r'projectfile', projectView.ProjectFileViewSet)
 
-
+projectRouter = routers.DefaultRouter()
+projectRouter.register(r'projectfile', projectView.ProjectFileViewSet)
 
 urlpatterns = [
     url(r'^signin/', authviews.obtain_auth_token),
     url(r'^api-token-auth/', authviews.obtain_auth_token),
     url(r'^xadmin/', xadmin.site.urls),
     url(r'^', include(router.urls)),
+    url(r'^project/(?P<course_id>\d+)/', include(projectRouter.urls)),
     url(r'docs/',include_docs_urls(title="cooperation")),
     url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework'))
     # url(r'^users/', include('users.urls', namespace='users')),
     # url(r'^cooperation/', include('cooperation.urls', namespace='cooperation')),
 ]
+
+

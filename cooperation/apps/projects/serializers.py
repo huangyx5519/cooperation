@@ -12,6 +12,21 @@ class FileSerializer(serializers.ModelSerializer):
         model = File
         fields = "__all__"
 
+
+class FileCreateSerializer(serializers.ModelSerializer):
+    upload_people = serializers.HiddenField(
+        default=serializers.CurrentUserDefault()
+    )
+
+    def validate(self, attrs):
+        projectID =int(self._kwargs['context']['request']._request.path.split('/')[2])
+        attrs["project_belong_to_id"] = projectID
+        return attrs
+
+    class Meta:
+        model = File
+        fields = ("title", "project_belong_to_id", "url","upload_people",)
+
 class UserProjectDetailSerializer(serializers.ModelSerializer):
     member=UserRegSerializer()
 

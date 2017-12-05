@@ -57,7 +57,7 @@ class File(models.Model):
     url = models.TextField(verbose_name=u"文件路径")
     type = models.TextField(verbose_name=u"文件类型")
     upload_people = models.ForeignKey(UserProfile, verbose_name=u"上传者")
-    upload_date = models.DateTimeField(verbose_name=u"上传时间时间")
+    upload_date = models.DateTimeField(default=datetime.now,verbose_name=u"上传时间时间")
     is_valid = models.BooleanField(default=True, verbose_name=u"是否有效")
 
     class Meta:

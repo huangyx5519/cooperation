@@ -88,9 +88,17 @@ class ProjectFileViewSet(viewsets.ModelViewSet):
     # permission_classes = (ProjectPermission,)
     filter_backends = (DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter)
     ordering_fields = ('upload_date',)
+    projectID = None
 
     def get_queryset(self):
-        re = self.request
+        path = self.request._request.path
+        self.projectID = path.split('/')[2]
+        queryset = File.objects.all().filter(project_belong_to_id=self.projectID)
+        return queryset
 
     def get_serializer_class(self):
+        if self.action == "create":
+            return FileCreateSerializer
         return FileSerializer
+
+
