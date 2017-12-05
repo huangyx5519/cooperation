@@ -19,43 +19,13 @@ class UserProjectSerializer(serializers.ModelSerializer):
         model = UserProject
         fields = ("member","project","take_time",)
 
-class CreateUserProjectSerializer(serializers.Serializer):
-    memberID = serializers.IntegerField()
-    projectID = serializers.IntegerField()
+class CreateUserProjectSerializer(serializers.ModelSerializer):
+    member_id = serializers.IntegerField()
+    project_id = serializers.IntegerField()
 
-    def create(self, validated_data):
-        return
-
-    # def create(self, validated_data):
-    #     return True
-        # member = UserProfile.objects.get(id=self.memberID)
-        # project = Project.objects.get(id=self.projectID)
-        # userProject = UserProject()
-        # userProject.member = member
-        # userProject.project = project
-        # userProject.save()
-
-
-
-
-    # memberID = serializers.IntegerField()
-    # projectID = serializers.IntegerField()
-    # member = serializers.HiddenField(
-    #     default=serializers.CurrentUserDefault()
-    # )
-    # project = serializers.HiddenField(default=Project.objects.get(id=19))
-    #
-    # def validate(self, attrs):
-    #     if attrs["memberID"]:
-    #         attrs["member"] = UserProfile.objects.get(id=attrs["memberID"])
-    #     attrs["projectID"] = Project.objects.get(id=attrs["projectID"])
-    #     del attrs["memberID"]
-    #     del attrs["projectID"]
-    #     return attrs
-    #
-    # class Meta:
-    #     model = UserProject
-    #     fields = ("member", "project", "take_time","memberID","projectID", )
+    class Meta:
+        model = UserProject
+        fields = ("take_time","member_id","project_id",)
 
 
 #list 显示
