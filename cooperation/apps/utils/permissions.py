@@ -1,37 +1,23 @@
 # -*- coding: utf-8 -*-
 from rest_framework import permissions
+from projects.models import UserProject
 
-class IsOwnerOrReadOnly(permissions.BasePermission):
-    """
-    Object-level permission to only allow owners of an object to edit it.
-    Assumes the model instance has an `owner` attribute.
-    """
+class ProjectPermission(permissions.BasePermission):
 
     def has_object_permission(self, request, view, obj):
-        # Read permissions are allowed to any request,
-        # so we'll always allow GET, HEAD or OPTIONS requests.
-        if request.method in permissions.SAFE_METHODS:   #re
+
+        action = view.action
+        ProjectId = obj.id
+        UserProjectSet = UserProject.objects.filter(project_id=ProjectId).all()
+        members = [user_project.member for user_project in UserProjectSet]
+
+        if (action=="retrieve"):
+            if (request.user in members):
+                return True
+        if (action=="list"):
             return True
 
-        can = (obj.sponsor == request.user)
-        # Instance must have an attribute named `owner`.
-        return can
+        # return obj.sponsor == request.user
+        return False
 
 
-# class IsProjectMember(permissions.BasePermission):
-#     """
-#     Object-level permission to only allow owners of an object to edit it.
-#     Assumes the model instance has an `owner` attribute.
-#     """
-#
-#     def has_object_permission(self, request, view, obj):
-#         # Read permissions are allowed to any request,
-#         # so we'll always allow GET, HEAD or OPTIONS requests.
-#         if request.method in permissions.SAFE_METHODS:   #re
-#             return True
-#
-#         if request.method == "retrieve":
-#
-#
-#         # Instance must have an attribute named `owner`.
-#         return False

@@ -12,7 +12,7 @@ from rest_framework.viewsets import GenericViewSet
 from rest_framework.permissions import IsAuthenticated
 from .models import *
 from .serializers import *
-from utils.permissions import IsOwnerOrReadOnly
+from utils.permissions import ProjectPermission
 
 
 # 展示
@@ -24,7 +24,7 @@ class ProjectViewSet(viewsets.ModelViewSet):
     queryset = Project.objects.all()
     # serializer_class = ProjectSerializer
     authentication_classes = (TokenAuthentication,)
-    permission_classes = (IsOwnerOrReadOnly,)
+    permission_classes = (ProjectPermission,)
     filter_backends = (DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter)
     # search_fields = ('title',)
     search_fields= ('sponsor__id',)
