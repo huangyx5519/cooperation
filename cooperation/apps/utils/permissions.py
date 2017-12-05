@@ -17,7 +17,18 @@ class ProjectPermission(permissions.BasePermission):
         if (action=="list"):
             return True
 
-        # return obj.sponsor == request.user
-        return False
+        return obj.sponsor == request.user
+
+
+
+class TakePartInPermission(permissions.BasePermission):
+
+    def has_object_permission(self, request, view, obj):
+
+        if request.method in permissions.SAFE_METHODS:
+            return True
+
+        return obj.member == request.user or obj.project.sponsor == request.user
+
 
 

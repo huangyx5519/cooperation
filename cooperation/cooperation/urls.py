@@ -27,6 +27,7 @@ router = routers.DefaultRouter()
 router.register(r'users', userView.UserProfileViewSet)
 router.register(r'signup', userView.UserSignUpViewset)
 router.register(r'project', projectView.ProjectViewSet)
+router.register(r'userproject', projectView.UserProjectViewset)
 
 
 

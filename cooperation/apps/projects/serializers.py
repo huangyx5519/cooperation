@@ -19,6 +19,20 @@ class UserProjectSerializer(serializers.ModelSerializer):
         model = UserProject
         fields = ("member","project","take_time",)
 
+class CreateUserProjectSerializer(serializers.ModelSerializer):
+    member = serializers.HiddenField(
+        default=serializers.CurrentUserDefault()
+    )
+
+    def validate(self, attrs):
+        attrs["mobile"] = attrs["username"]
+        del attrs["code"]
+        return attrs
+
+    class Meta:
+        model = UserProject
+        fields = ("member", "project", "take_time",)
+
 
 #list 显示
 class ProjectSerializer(serializers.ModelSerializer):
