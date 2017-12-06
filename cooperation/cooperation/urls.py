@@ -26,13 +26,12 @@ import xadmin
 router = routers.DefaultRouter()
 router.register(r'users', userView.UserProfileViewSet)
 router.register(r'signup', userView.UserSignUpViewset)
-# router.register(r'project', projectView.ProjectViewSet)
+router.register(r'project', projectView.ProjectViewSet)
 router.register(r'userproject', projectView.UserProjectViewset)
 router.register(r'file', projectView.FileViewSet)
-# router.register(r'projectfile', projectView.ProjectFileViewSet)
 
 projectRouter = routers.DefaultRouter()
-projectRouter.register(r'projectfile', projectView.ProjectFileViewSet)
+projectRouter.register(r'file', projectView.ProjectFileViewSet)
 
 urlpatterns = [
     url(r'^signin/', authviews.obtain_auth_token),
