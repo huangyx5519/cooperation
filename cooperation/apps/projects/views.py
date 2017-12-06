@@ -15,19 +15,43 @@ from .serializers import *
 from utils.permissions import ProjectPermission,TakePartInPermission
 
 # Task  Discussion  Reply
-class TaskViewSet(viewsets.ModelViewSet):
-    """
-    API endpoint that allows users to be viewed or edited.
-    """
-    queryset = Task.objects.all()
-    authentication_classes = (TokenAuthentication,)
-    # permission_classes = (ProjectPermission,)
-    filter_backends = (DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter)
-    # ordering_fields = ('upload_date',)
+# class TaskViewSet(viewsets.ModelViewSet):
+#     """
+#     API endpoint that allows users to be viewed or edited.
+#     """
+#     queryset = Task.objects.all()
+#     authentication_classes = (TokenAuthentication,)
+#     # permission_classes = (ProjectPermission,)
+#     # filter_backends = (DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter)
+#     # ordering_fields = ('upload_date',)
+#
+#
+#     def get_serializer_class(self):
+#         return TaskSerializer
 
 
-    def get_serializer_class(self):
-        return TaskSerializer
+# class ProjectTaskViewSet(viewsets.ModelViewSet):
+#     """
+#     API endpoint that allows users to be viewed or edited.
+#     """
+#
+#     queryset = Task.objects.all()
+#     authentication_classes = (TokenAuthentication,)
+#     # permission_classes = (ProjectPermission,)
+#     # filter_backends = (DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter)
+#     # ordering_fields = ('upload_date',)
+#     projectID = None
+#
+#     def get_queryset(self):
+#         path = self.request._request.path
+#         self.projectID = path.split('/')[2]
+#         queryset = Task.objects.all().filter(project_belong_to_id=self.projectID)
+#         return queryset
+#
+#     def get_serializer_class(self):
+#         if self.action == "create":
+#             return TaskCreateSerializer
+#         return TaskSerializer
 
 
 class ProjectTaskViewSet(viewsets.ModelViewSet):
