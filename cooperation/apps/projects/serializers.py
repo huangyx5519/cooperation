@@ -7,9 +7,50 @@ from users.models import UserProfile
 from users.serializers import UserRegSerializer
 from rest_framework.validators import UniqueTogetherValidator
 
-class FileSerializer(serializers.ModelSerializer):
+
+# create（帮填） simple(权限)  默认all  扩展详情
+
+
+class TaskCreateSerializer(serializers.ModelSerializer):
+    receiver_id = serializers.IntegerField()
+    sponsor = serializers.HiddenField(
+        default=serializers.CurrentUserDefault()
+    )
+
+    def validate(self, attrs):
+        projectID =int(self._kwargs['context']['request']._request.path.split('/')[2])
+        attrs["project_belong_to_id"] = projectID
+        return attrs
+
     class Meta:
-        model = File
+        model = Task
+        fields = ("title", "project_belong_to_id", "url","sponsor","receiver_id","starting_time","deadline",)
+
+
+class TaskSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Task
+        fields = "__all__"
+
+
+class DiscussionCreateSerializer(serializers.ModelSerializer):
+    sponsor = serializers.HiddenField(
+        default=serializers.CurrentUserDefault()
+    )
+
+    def validate(self, attrs):
+        projectID =int(self._kwargs['context']['request']._request.path.split('/')[2])
+        attrs["project_belong_to_id"] = projectID
+        return attrs
+
+    class Meta:
+        model = Discussion
+        fields = ("title", "project_belong_to_id", "desc","sponsor",)
+
+
+class DiscussionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Discussion
         fields = "__all__"
 
 
@@ -27,16 +68,15 @@ class FileCreateSerializer(serializers.ModelSerializer):
         model = File
         fields = ("title", "project_belong_to_id", "url","upload_people",)
 
-class UserProjectDetailSerializer(serializers.ModelSerializer):
-    member=UserRegSerializer()
 
+class FileSerializer(serializers.ModelSerializer):
     class Meta:
-        model = UserProject
-        fields = ("member","project","take_time",)
+        model = File
+        fields = "__all__"
 
 
 class UserProjectSerializer(serializers.ModelSerializer):
-    member_id = serializers.IntegerField()
+    member_id=serializers.IntegerField()
     project_id = serializers.IntegerField()
 
     class Meta:
@@ -49,6 +89,24 @@ class UserProjectSerializer(serializers.ModelSerializer):
             )
         ]
         fields = ("take_time","member_id","project_id",)
+
+
+class UserProjectDetailSerializer(serializers.ModelSerializer):
+    member=UserRegSerializer()
+
+    class Meta:
+        model = UserProject
+        fields = ("member","project","take_time",)
+
+
+class ProjectCreateSerializer(serializers.ModelSerializer):
+    sponsor = serializers.HiddenField(
+        default=serializers.CurrentUserDefault()
+    )
+
+    class Meta:
+        model = Project
+        fields = ("id","title","desc","sponsor",)
 
 
 class ProjectSerializer(serializers.ModelSerializer):

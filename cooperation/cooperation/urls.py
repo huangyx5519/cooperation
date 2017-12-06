@@ -28,10 +28,13 @@ router.register(r'users', userView.UserProfileViewSet)
 router.register(r'signup', userView.UserSignUpViewset)
 router.register(r'project', projectView.ProjectViewSet)
 router.register(r'userproject', projectView.UserProjectViewset)
-router.register(r'file', projectView.FileViewSet)
+# router.register(r'file', projectView.FileViewSet)
+router.register(r'task', projectView.TaskViewSet)
 
 projectRouter = routers.DefaultRouter()
 projectRouter.register(r'file', projectView.ProjectFileViewSet)
+projectRouter.register(r'task', projectView.ProjectTaskViewSet)
+projectRouter.register(r'discussion', projectView.ProjectDiscussionViewSet)
 
 urlpatterns = [
     url(r'^signin/', authviews.obtain_auth_token),

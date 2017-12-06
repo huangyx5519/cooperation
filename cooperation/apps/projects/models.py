@@ -40,7 +40,7 @@ class Task(models.Model):
     sponsor = models.ForeignKey(UserProfile, related_name='sponsor', verbose_name=u"发起者")
     receiver = models.ForeignKey(UserProfile, related_name='receiver', verbose_name=u"接收者")
     starting_time = models.DateTimeField(default=datetime.now, verbose_name=u"创建时间")
-    deadline = models.DateTimeField(verbose_name=u"截止时间")
+    deadline = models.DateTimeField(verbose_name=u"截止时间",null=True)
     is_end = models.BooleanField(default=False, verbose_name=u"是否结束")
 
     class Meta:

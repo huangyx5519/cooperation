@@ -14,53 +14,68 @@ from .models import *
 from .serializers import *
 from utils.permissions import ProjectPermission,TakePartInPermission
 
-
-# 展示
-
-class ProjectViewSet(viewsets.ModelViewSet):
+# Task  Discussion  Reply
+class TaskViewSet(viewsets.ModelViewSet):
     """
     API endpoint that allows users to be viewed or edited.
     """
-    queryset = Project.objects.all()
+    queryset = Task.objects.all()
     authentication_classes = (TokenAuthentication,)
-    permission_classes = (ProjectPermission,)
+    # permission_classes = (ProjectPermission,)
     filter_backends = (DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter)
-    filter_fields = ("sponsor__id",)
-    ordering_fields = ('create_time',)
+    # ordering_fields = ('upload_date',)
 
 
     def get_serializer_class(self):
-        #获取详情
-        if self.action == "retrieve":
-            return ProjectDetailSerializer
-        return ProjectSerializer
+        return TaskSerializer
 
 
-
-class UserProjectViewset(GenericViewSet,mixins.CreateModelMixin,mixins.DestroyModelMixin,mixins.ListModelMixin):
+class ProjectTaskViewSet(viewsets.ModelViewSet):
     """
-    list:
-        获取用户项目关系
-    retrieve:
-        判断某个项目已经参加
-    create:
-        加入
+    API endpoint that allows users to be viewed or edited.
     """
-    queryset = UserProject.objects.all()
-    # permission_classes = (IsAuthenticated, TakePartInPermission)
+
+    queryset = Task.objects.all()
     authentication_classes = (TokenAuthentication,)
-    filter_backends = (DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter)
-    filter_fields = ("project_id","member_id",)
+    # permission_classes = (ProjectPermission,)
+    # filter_backends = (DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter)
+    # ordering_fields = ('upload_date',)
+    projectID = None
 
-    # def get_queryset(self):
-        # return UserProject.objects.filter(member=self.request.user)
-        # return UserProject
+    def get_queryset(self):
+        path = self.request._request.path
+        self.projectID = path.split('/')[2]
+        queryset = Task.objects.all().filter(project_belong_to_id=self.projectID)
+        return queryset
 
     def get_serializer_class(self):
         if self.action == "create":
-            return UserProjectSerializer
-        return UserProjectDetailSerializer
+            return TaskCreateSerializer
+        return TaskSerializer
 
+
+class ProjectDiscussionViewSet(viewsets.ModelViewSet):
+    """
+    API endpoint that allows users to be viewed or edited.
+    """
+
+    queryset = Discussion.objects.all()
+    authentication_classes = (TokenAuthentication,)
+    # permission_classes = (ProjectPermission,)
+    # filter_backends = (DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter)
+    # ordering_fields = ('upload_date',)
+    projectID = None
+
+    def get_queryset(self):
+        path = self.request._request.path
+        self.projectID = path.split('/')[2]
+        queryset = Discussion.objects.all().filter(project_belong_to_id=self.projectID)
+        return queryset
+
+    def get_serializer_class(self):
+        if self.action == "create":
+            return DiscussionCreateSerializer
+        return DiscussionSerializer
 
 
 class FileViewSet(viewsets.ModelViewSet):
@@ -100,5 +115,51 @@ class ProjectFileViewSet(viewsets.ModelViewSet):
         if self.action == "create":
             return FileCreateSerializer
         return FileSerializer
+
+
+class UserProjectViewset(viewsets.ModelViewSet):
+    """
+    list:
+        获取用户项目关系
+    retrieve:
+        判断某个项目已经参加
+    create:
+        加入
+    """
+    queryset = UserProject.objects.all()
+    # permission_classes = (IsAuthenticated, TakePartInPermission)
+    authentication_classes = (TokenAuthentication,)
+    filter_backends = (DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter)
+    filter_fields = ("project_id","member_id",)
+
+    # def get_queryset(self):
+        # return UserProject.objects.filter(member=self.request.user)
+        # return UserProject
+
+    def get_serializer_class(self):
+        if self.action == "create":
+            return UserProjectSerializer
+        return UserProjectDetailSerializer
+
+
+class ProjectViewSet(viewsets.ModelViewSet):
+    """
+    API endpoint that allows users to be viewed or edited.
+    """
+    queryset = Project.objects.all()
+    authentication_classes = (TokenAuthentication,)
+    permission_classes = (ProjectPermission,)
+    filter_backends = (DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter)
+    filter_fields = ("sponsor__id",)
+    ordering_fields = ('create_time',)
+
+
+    def get_serializer_class(self):
+        #获取详情
+        if self.action == "retrieve":
+            return ProjectDetailSerializer
+        if self.action == "create":
+            return ProjectCreateSerializer
+        return ProjectSerializer
 
 
