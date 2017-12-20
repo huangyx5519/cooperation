@@ -37,11 +37,12 @@ projectRouter.register(r'task', projectView.ProjectTaskViewSet)
 projectRouter.register(r'discussion', projectView.ProjectDiscussionViewSet)
 
 urlpatterns = [
+    url(r'^getid/$', userView.getMyId.as_view()),     #获取用户id
     url(r'^signin/', authviews.obtain_auth_token),
     url(r'^api-token-auth/', authviews.obtain_auth_token),
     url(r'^xadmin/', xadmin.site.urls),
     url(r'^', include(router.urls)),
-    url(r'^project/(?P<course_id>\d+)/', include(projectRouter.urls)),
+    url(r'^project/(?P<project_id>\d+)/', include(projectRouter.urls)),
     url(r'docs/',include_docs_urls(title="cooperation")),
     url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework'))
     # url(r'^users/', include('users.urls', namespace='users')),

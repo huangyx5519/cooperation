@@ -28,3 +28,17 @@ class UserRegSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserProfile
         fields = ("username", "password")
+
+
+# class MySerializer(serializers.ModelSerializer):
+#     id = serializers.HiddenField(
+#         default=serializers.CurrentUserDefault()
+#     )
+#
+#     def validate(self, attrs):
+#         a = attrs["id"]
+#         return attrs
+#
+#     class Meta:
+#         model = UserProfile
+#         fields = ("id",)

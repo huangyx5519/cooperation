@@ -11,22 +11,6 @@ from rest_framework.validators import UniqueTogetherValidator
 # create（帮填） simple(权限)  默认all  扩展详情
 
 
-# class TaskCreateSerializer(serializers.ModelSerializer):
-#     receiver_id = serializers.IntegerField()
-#     sponsor = serializers.HiddenField(
-#         default=serializers.CurrentUserDefault()
-#     )
-#
-#     def validate(self, attrs):
-#         projectID =int(self._kwargs['context']['request']._request.path.split('/')[2])
-#         attrs["project_belong_to_id"] = projectID
-#         return attrs
-#
-#     class Meta:
-#         model = Task
-#         fields = ("title", "project_belong_to_id", "url","sponsor","receiver_id","starting_time","deadline",)
-
-
 class TaskCreateSerializer(serializers.ModelSerializer):
     receiver_id = serializers.IntegerField()
 
