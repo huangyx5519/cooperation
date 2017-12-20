@@ -162,4 +162,13 @@ class ProjectViewSet(viewsets.ModelViewSet):
             return ProjectCreateSerializer
         return ProjectSerializer
 
+    def perform_create(self, serializer):
+        project = serializer.save()
+        sponsor = project.sponsor
+        eUserProject = UserProject()
+        eUserProject.member=sponsor
+        eUserProject.project=project
+        eUserProject.save()
+
+
 

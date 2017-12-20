@@ -20,7 +20,6 @@ class UserRegSerializer(serializers.ModelSerializer):
         style={'input_type': 'password'},help_text="密码", label="密码", write_only=True,
     )
 
-
     def validate(self, attrs):
         attrs["password"] = make_password(attrs["password"])
         return attrs
@@ -30,15 +29,4 @@ class UserRegSerializer(serializers.ModelSerializer):
         fields = ("username", "password")
 
 
-# class MySerializer(serializers.ModelSerializer):
-#     id = serializers.HiddenField(
-#         default=serializers.CurrentUserDefault()
-#     )
-#
-#     def validate(self, attrs):
-#         a = attrs["id"]
-#         return attrs
-#
-#     class Meta:
-#         model = UserProfile
-#         fields = ("id",)
+

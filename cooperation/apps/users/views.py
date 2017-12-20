@@ -40,8 +40,6 @@ class UserProfileViewSet(viewsets.ModelViewSet):
     search_fields = ('username',)
     ordering_fields = ('username',)
 
-
-
 class UserSignUpViewset(mixins.CreateModelMixin, GenericViewSet):
     """
     用户
@@ -49,12 +47,10 @@ class UserSignUpViewset(mixins.CreateModelMixin, GenericViewSet):
     queryset = UserProfile.objects.all()
     serializer_class = UserRegSerializer
 
-
 class getMyId(APIView):
     def get(self, request,format=None):
         try:
             token=request.META['HTTP_AUTHORIZATION'].split()[1]
-
 
             conn = MySQLdb.connect(
                 host='localhost',
@@ -69,8 +65,6 @@ class getMyId(APIView):
             cur.close()
         except Exception, e:
             return Response(status=status.HTTP_401_UNAUTHORIZED)
-
-
 
         return Response(userid)
 
