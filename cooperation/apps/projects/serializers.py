@@ -10,6 +10,8 @@ from rest_framework.validators import UniqueTogetherValidator
 
 # create（帮填） simple(权限)  默认all  扩展详情
 
+
+
 class ReplyCreateSerializer(serializers.ModelSerializer):
 
     reply_people = serializers.HiddenField(
@@ -17,14 +19,17 @@ class ReplyCreateSerializer(serializers.ModelSerializer):
     )
 
     def validate(self, attrs):
-        # discussion_belong_to_id = self.kwargs['discussion_id']
-        discussion_belong_to_id = 1
-        attrs[discussion_belong_to_id]=discussion_belong_to_id
+        # projectID=self.kwargs['discussion_id']
+        project_belong_to_id = int(self._kwargs['context']['request']._request.path.split('/')[2])
+        discussion_belong_to_id = int(self._kwargs['context']['request']._request.path.split('/')[4])
+        attrs["discussion_belong_to_id"] = discussion_belong_to_id
+        attrs["project_belong_to_id"] = project_belong_to_id
         return attrs
 
     class Meta:
         model = Reply
-        fields = ("content","discussion_belong_to_id","reply_people","reply_time",)
+        fields = ("content", "discussion_belong_to_id", "project_belong_to_id", "reply_time", "reply_people",)
+
 
 
 class ReplySerializer(serializers.ModelSerializer):
