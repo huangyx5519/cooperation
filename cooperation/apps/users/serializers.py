@@ -6,11 +6,16 @@ from rest_framework import serializers
 from rest_framework.validators import UniqueValidator
 from django.contrib.auth.hashers import make_password
 
+class UserProfileSimpleSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = UserProfile
+        fields = ("id","username","nick_name","gender","mobile","image")
+
 
 class UserProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserProfile
-        fields = ("id","username","email", "date_joined","nick_name","gender","address","mobile","image")
+        fields = ("id","username","email","nick_name","gender","address","mobile","image")
 
 
 class UserRegSerializer(serializers.ModelSerializer):

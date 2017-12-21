@@ -54,7 +54,7 @@ class Task(models.Model):
 class File(models.Model):
     title = models.TextField(verbose_name=u"文件名称")
     project_belong_to = models.ForeignKey(Project, verbose_name=u"所属项目",related_name="files")
-    url = models.TextField(verbose_name=u"文件路径")
+    url = models.FileField(upload_to="project/file/%Y/%m", verbose_name=u"资源文件", max_length=100)
     type = models.TextField(verbose_name=u"文件类型")
     upload_people = models.ForeignKey(UserProfile, verbose_name=u"上传者")
     upload_date = models.DateTimeField(default=datetime.now,verbose_name=u"上传时间时间")
@@ -72,7 +72,7 @@ class Discussion(models.Model):
     title = models.TextField(verbose_name=u"讨论名称")
     desc = models.TextField(verbose_name=u"讨论描述")
     project_belong_to = models.ForeignKey(Project, verbose_name=u"所属项目")
-    sponsor = models.ForeignKey(UserProfile, verbose_name=u"发起者")
+    sponsor = models.ForeignKey(UserProfile, verbose_name=u"发起者" )
     starting_time = models.DateTimeField(default=datetime.now, verbose_name=u"创建时间")
 
     class Meta:
@@ -84,12 +84,13 @@ class Discussion(models.Model):
 
 
 class Reply(models.Model):
-    title = models.TextField(verbose_name=u"回复标题")
+    # title = models.TextField(verbose_name=u"回复标题")
     content = models.TextField(verbose_name=u"回复内容")
     reply_time = models.DateTimeField(default=datetime.now, verbose_name=u"回复时间")
+    reply_people = models.ForeignKey(UserProfile, verbose_name=u"层主",null=True)
     project_belong_to = models.ForeignKey(Project, verbose_name=u"所属项目")
     discussion_belong_to = models.ForeignKey(Discussion, verbose_name=u"所属讨论")
-    floor_place = models.IntegerField(default=1, verbose_name=u"所在楼层")
+    # floor_place = models.IntegerField(default=1, verbose_name=u"所在楼层")
 
     class Meta:
         verbose_name = u"回复"

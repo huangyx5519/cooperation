@@ -2,6 +2,7 @@
 from __future__ import unicode_literals
 
 import MySQLdb
+from rest_framework.decorators import detail_route, list_route
 from rest_framework.views import APIView
 
 from .models import UserProfile
@@ -35,7 +36,7 @@ class UserProfileViewSet(viewsets.ModelViewSet):
     queryset = UserProfile.objects.all().order_by('-date_joined')
     serializer_class = UserProfileSerializer
     authentication_classes = (TokenAuthentication,)
-    pagination_class = UserProfilePagination
+    # pagination_class = UserProfilePagination
     filter_backends = (DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter)
     filter_class = UserProfileFilter
     search_fields = ('username',)
@@ -83,6 +84,8 @@ class MyViewSet(mixins.UpdateModelMixin, mixins.ListModelMixin, GenericViewSet):
         user = self.request.user
         queryset = UserProfile.objects.all().filter(id=user.id)
         return queryset
+
+ 
 
 
 

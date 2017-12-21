@@ -16,6 +16,21 @@ from utils.permissions import ProjectPermission,TakePartInPermission
 
 # Task  Discussion  Reply
 
+class DiscussionReplyViewSet(viewsets.ModelViewSet):
+    queryset = Reply.objects.all()
+    authentication_classes = (TokenAuthentication, SessionAuthentication,)
+    permission_classes = (ProjectPermission,)
+
+    def get_queryset(self):
+        discussion_id = self.kwargs['discussion_id']
+        queryset = Reply.objects.all().filter(discussion_belong_to_id=discussion_id)
+        return queryset
+
+    def get_serializer_class(self):
+        if self.action == "create" or "update":
+            return ReplyCreateSerializer
+        return ReplySerializer
+
 class ProjectTaskViewSet(viewsets.ModelViewSet):
     """
     API endpoint that allows users to be viewed or edited.
@@ -31,7 +46,7 @@ class ProjectTaskViewSet(viewsets.ModelViewSet):
         return queryset
 
     def get_serializer_class(self):
-        if self.action == "create":
+        if self.action == "create" or "update":
             return TaskCreateSerializer
         return TaskSerializer
 
@@ -44,20 +59,21 @@ class ProjectDiscussionViewSet(viewsets.ModelViewSet):
     queryset = Discussion.objects.all()
     authentication_classes = (TokenAuthentication,)
     # permission_classes = (ProjectPermission,)
-    # filter_backends = (DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter)
-    # ordering_fields = ('upload_date',)
-    projectID = None
+    filter_backends = (DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter)
+    ordering_fields = ('upload_date',)
 
     def get_queryset(self):
-        path = self.request._request.path
-        self.projectID = path.split('/')[2]
-        queryset = Discussion.objects.all().filter(project_belong_to_id=self.projectID)
+        project_id = self.kwargs['project_id']
+        queryset = Discussion.objects.all().filter(project_belong_to_id=project_id)
         return queryset
 
     def get_serializer_class(self):
-        if self.action == "create":
+        s =self.action
+        if self.action == "create" or "update":
             return DiscussionCreateSerializer
         return DiscussionSerializer
+
+
 
 
 class FileViewSet(viewsets.ModelViewSet):
@@ -89,13 +105,12 @@ class ProjectFileViewSet(viewsets.ModelViewSet):
 
 
     def get_queryset(self):
-        path = self.request._request.path
-        self.projectID = path.split('/')[2]
-        queryset = File.objects.all().filter(project_belong_to_id=self.projectID)
+        project_id = self.kwargs['project_id']
+        queryset = File.objects.all().filter(project_belong_to_id=project_id)
         return queryset
 
     def get_serializer_class(self):
-        if self.action == "create":
+        if self.action == "create" or self.action == "update" :
             return FileCreateSerializer
         return FileSerializer
 
@@ -116,7 +131,7 @@ class UserProjectViewset(viewsets.ModelViewSet):
     search_fields = ("member_id","project_id")
 
     def get_serializer_class(self):
-        if self.action == "create":
+        if self.action == "create" or "update":
             return UserProjectSerializer
         return UserProjectDetailSerializer
 
@@ -127,7 +142,7 @@ class ProjectViewSet(viewsets.ModelViewSet):
     """
     queryset = Project.objects.all()
     authentication_classes = (TokenAuthentication,)
-    permission_classes = (ProjectPermission,)
+    # permission_classes = (ProjectPermission,)
     filter_backends = (DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter)
     filter_fields = ("sponsor__id",)
     ordering_fields = ('create_time',)

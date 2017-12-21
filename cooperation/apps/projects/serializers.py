@@ -4,11 +4,33 @@ from rest_framework import serializers
 from rest_framework.validators import UniqueValidator
 from  .models import *
 from users.models import UserProfile
-from users.serializers import UserRegSerializer
+from users.serializers import UserRegSerializer,UserProfileSimpleSerializer
 from rest_framework.validators import UniqueTogetherValidator
 
 
 # create（帮填） simple(权限)  默认all  扩展详情
+
+class ReplyCreateSerializer(serializers.ModelSerializer):
+
+    reply_people = serializers.HiddenField(
+        default=serializers.CurrentUserDefault()
+    )
+
+    def validate(self, attrs):
+        discussion_belong_to_id = self.kwargs['discussion_id']
+        attrs[discussion_belong_to_id]=discussion_belong_to_id
+        return attrs
+
+    class Meta:
+        model = Reply
+        fields = ("content","discussion_belong_to_id","reply_people","reply_time",)
+
+
+class ReplySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Reply
+        fields = "__all__"
+
 
 
 class TaskCreateSerializer(serializers.ModelSerializer):
@@ -29,6 +51,9 @@ class TaskCreateSerializer(serializers.ModelSerializer):
 
 
 class TaskSerializer(serializers.ModelSerializer):
+    sponsor = UserProfileSimpleSerializer()
+    receiver = UserProfileSimpleSerializer()
+
     class Meta:
         model = Task
         fields = "__all__"
@@ -50,6 +75,8 @@ class DiscussionCreateSerializer(serializers.ModelSerializer):
 
 
 class DiscussionSerializer(serializers.ModelSerializer):
+    sponsor = UserProfileSimpleSerializer ()
+
     class Meta:
         model = Discussion
         fields = "__all__"
@@ -71,6 +98,8 @@ class FileCreateSerializer(serializers.ModelSerializer):
 
 
 class FileSerializer(serializers.ModelSerializer):
+    upload_people = UserProfileSimpleSerializer()
+
     class Meta:
         model = File
         fields = "__all__"
