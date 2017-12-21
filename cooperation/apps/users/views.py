@@ -17,6 +17,7 @@ from rest_framework.viewsets import GenericViewSet
 from rest_framework.response import Response
 from rest_framework.authtoken.admin import TokenAdmin
 from rest_framework import status
+from rest_framework.permissions import IsAuthenticated
 
 from .filters import UserProfileFilter
 
@@ -26,6 +27,7 @@ class UserProfilePagination(PageNumberPagination):
     page_size_query_param = 'page_size'
     max_page_size = 100
 
+
 class UserProfileViewSet(viewsets.ModelViewSet):
     """
     API endpoint that allows users to be viewed or edited.
@@ -33,12 +35,12 @@ class UserProfileViewSet(viewsets.ModelViewSet):
     queryset = UserProfile.objects.all().order_by('-date_joined')
     serializer_class = UserProfileSerializer
     authentication_classes = (TokenAuthentication,)
-    # permission_classes = (IsAdminUser,)
     pagination_class = UserProfilePagination
     filter_backends = (DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter)
     filter_class = UserProfileFilter
     search_fields = ('username',)
     ordering_fields = ('username',)
+
 
 class UserSignUpViewset(mixins.CreateModelMixin, GenericViewSet):
     """
@@ -46,6 +48,7 @@ class UserSignUpViewset(mixins.CreateModelMixin, GenericViewSet):
     """
     queryset = UserProfile.objects.all()
     serializer_class = UserRegSerializer
+
 
 class getMyId(APIView):
     def get(self, request,format=None):
@@ -69,13 +72,22 @@ class getMyId(APIView):
         return Response(userid)
 
 
-# class MyViewset(mixins.ListModelMixin,GenericViewSet):
-#     authentication_classes = (TokenAuthentication,)
-#     queryset = UserProfile.objects.all()
-#     serializer_class=MySerializer
-#
-#     def get_queryset(self):
-#         return UserProfile.objects.filter(id=self.request.user.id)
+class MyViewSet(mixins.UpdateModelMixin, mixins.ListModelMixin, GenericViewSet):
+
+    queryset = UserProfile.objects.all()
+    authentication_classes = (TokenAuthentication,)
+    serializer_class = UserProfileSerializer
+    permission_classes = (IsAuthenticated, )
+
+    def get_queryset(self):
+        user = self.request.user
+        queryset = UserProfile.objects.all().filter(id=user.id)
+        return queryset
+
+
+
+
+
 
 
 

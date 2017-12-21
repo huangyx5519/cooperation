@@ -15,20 +15,6 @@ from .serializers import *
 from utils.permissions import ProjectPermission,TakePartInPermission
 
 # Task  Discussion  Reply
-# class TaskViewSet(viewsets.ModelViewSet):
-#     """
-#     API endpoint that allows users to be viewed or edited.
-#     """
-#     queryset = Task.objects.all()
-#     authentication_classes = (TokenAuthentication,)
-#     # permission_classes = (ProjectPermission,)
-#     # filter_backends = (DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter)
-#     # ordering_fields = ('upload_date',)
-#
-#
-#     def get_serializer_class(self):
-#         return TaskSerializer
-
 
 class ProjectTaskViewSet(viewsets.ModelViewSet):
     """
@@ -38,14 +24,10 @@ class ProjectTaskViewSet(viewsets.ModelViewSet):
     queryset = Task.objects.all()
     authentication_classes = (TokenAuthentication,SessionAuthentication,)
     permission_classes = (ProjectPermission,)
-    # filter_backends = (DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter)
-    # ordering_fields = ('upload_date',)
-    projectID = None
 
     def get_queryset(self):
-        path = self.request._request.path
-        self.projectID = path.split('/')[2]
-        queryset = Task.objects.all().filter(project_belong_to_id=self.projectID)
+        project_id = self.kwargs['project_id']
+        queryset = Task.objects.all().filter(project_belong_to_id=project_id)
         return queryset
 
     def get_serializer_class(self):
@@ -105,6 +87,7 @@ class ProjectFileViewSet(viewsets.ModelViewSet):
     ordering_fields = ('upload_date',)
     projectID = None
 
+
     def get_queryset(self):
         path = self.request._request.path
         self.projectID = path.split('/')[2]
@@ -127,14 +110,10 @@ class UserProjectViewset(viewsets.ModelViewSet):
         加入
     """
     queryset = UserProject.objects.all()
-    # permission_classes = (IsAuthenticated, TakePartInPermission)
     authentication_classes = (TokenAuthentication,)
     filter_backends = (DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter)
-    filter_fields = ("project_id","member_id",)
-
-    # def get_queryset(self):
-        # return UserProject.objects.filter(member=self.request.user)
-        # return UserProject
+    # filter_fields = ("project_id","member_id",)
+    search_fields = ("member_id","project_id")
 
     def get_serializer_class(self):
         if self.action == "create":

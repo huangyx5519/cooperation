@@ -10,6 +10,7 @@ import xadmin
 
 # from django.contrib import admin
 router = routers.DefaultRouter()
+router.register(r'myinfo', userView.MyViewSet)
 router.register(r'users', userView.UserProfileViewSet)
 router.register(r'signup', userView.UserSignUpViewset)
 router.register(r'project', projectView.ProjectViewSet)
@@ -18,6 +19,7 @@ router.register(r'userproject', projectView.UserProjectViewset)
 projectRouter = routers.DefaultRouter()
 projectRouter.register(r'file', projectView.ProjectFileViewSet)
 projectRouter.register(r'task', projectView.ProjectTaskViewSet)
+# projectRouter.register(r'member', projectView.ProjectMemberViewSet)
 projectRouter.register(r'discussion', projectView.ProjectDiscussionViewSet)
 
 urlpatterns = [
