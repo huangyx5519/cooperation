@@ -27,7 +27,7 @@ class DiscussionReplyViewSet(viewsets.ModelViewSet):
         return queryset
 
     def get_serializer_class(self):
-        if self.action == "create" or "update":
+        if self.action == "create" or self.action == "update":
             return ReplyCreateSerializer
         return ReplySerializer
 
@@ -46,7 +46,7 @@ class ProjectTaskViewSet(viewsets.ModelViewSet):
         return queryset
 
     def get_serializer_class(self):
-        if self.action == "create" or "update":
+        if self.action == "create" or self.action == "update":
             return TaskCreateSerializer
         return TaskSerializer
 
@@ -69,7 +69,7 @@ class ProjectDiscussionViewSet(viewsets.ModelViewSet):
 
     def get_serializer_class(self):
         s =self.action
-        if self.action == "create" or "update":
+        if self.action == "create" or self.action == "update":
             return DiscussionCreateSerializer
         return DiscussionSerializer
 
@@ -131,7 +131,7 @@ class UserProjectViewset(viewsets.ModelViewSet):
     search_fields = ("member_id","project_id")
 
     def get_serializer_class(self):
-        if self.action == "create" or "update":
+        if self.action == "create" or self.action == "update":
             return UserProjectSerializer
         return UserProjectDetailSerializer
 

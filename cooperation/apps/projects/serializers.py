@@ -17,7 +17,8 @@ class ReplyCreateSerializer(serializers.ModelSerializer):
     )
 
     def validate(self, attrs):
-        discussion_belong_to_id = self.kwargs['discussion_id']
+        # discussion_belong_to_id = self.kwargs['discussion_id']
+        discussion_belong_to_id = 1
         attrs[discussion_belong_to_id]=discussion_belong_to_id
         return attrs
 
@@ -29,7 +30,7 @@ class ReplyCreateSerializer(serializers.ModelSerializer):
 class ReplySerializer(serializers.ModelSerializer):
     class Meta:
         model = Reply
-        fields = "__all__"
+        fields = ("id","content", "discussion_belong_to", "reply_people", "reply_time",)
 
 
 
@@ -47,7 +48,7 @@ class TaskCreateSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Task
-        fields = ("title", "project_belong_to_id", "receiver_id","sponsor","starting_time","deadline",)
+        fields = ("title", "project_belong_to", "receiver_id","sponsor","starting_time","deadline",)
 
 
 class TaskSerializer(serializers.ModelSerializer):
@@ -56,7 +57,7 @@ class TaskSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Task
-        fields = "__all__"
+        fields = ("id","title", "project_belong_to", "receiver", "sponsor", "starting_time", "deadline",)
 
 
 class DiscussionCreateSerializer(serializers.ModelSerializer):
@@ -79,7 +80,7 @@ class DiscussionSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Discussion
-        fields = "__all__"
+        fields = ("id","title", "project_belong_to", "desc", "sponsor",)
 
 
 class FileCreateSerializer(serializers.ModelSerializer):
@@ -102,7 +103,7 @@ class FileSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = File
-        fields = "__all__"
+        fields = ("id","title", "project_belong_to", "url", "upload_people",)
 
 
 class UserProjectSerializer(serializers.ModelSerializer):
