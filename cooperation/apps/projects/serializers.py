@@ -53,7 +53,7 @@ class TaskCreateSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Task
-        fields = ("title", "project_belong_to", "receiver_id","sponsor","starting_time","deadline",)
+        fields = ("title", "desc","project_belong_to", "receiver_id","sponsor","starting_time","deadline",)
 
 
 class TaskSerializer(serializers.ModelSerializer):
@@ -62,7 +62,7 @@ class TaskSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Task
-        fields = ("id","title", "project_belong_to", "receiver", "sponsor", "starting_time", "deadline",)
+        fields = ("id","title", "desc","project_belong_to", "receiver", "sponsor", "starting_time", "deadline",)
 
 
 class DiscussionCreateSerializer(serializers.ModelSerializer):
@@ -89,19 +89,20 @@ class DiscussionSerializer(serializers.ModelSerializer):
 
 
 class FileCreateSerializer(serializers.ModelSerializer):
-    upload_people = serializers.HiddenField(
-        default=serializers.CurrentUserDefault()
-    )
+    # upload_people = serializers.HiddenField(
+    #     default=serializers.CurrentUserDefault()
+    # )
 
     def validate(self, attrs):
-        projectID =int(self._kwargs['context']['request']._request.path.split('/')[2])
-        attrs["project_belong_to_id"] = projectID
+        # projectID =int(self._kwargs['context']['request']._request.path.split('/')[2])
+        attrs["project_belong_to_id"] = 19
+        attrs['upload_people_id']=19
         return attrs
 
     class Meta:
         model = File
-        fields = ("title", "project_belong_to_id", "url","upload_people",)
-
+        # fields = ("project_belong_to_id", "url","upload_people",)
+        fields = ("url", "project_belong_to_id",'upload_people_id',)
 
 class FileSerializer(serializers.ModelSerializer):
     upload_people = UserProfileSimpleSerializer()
@@ -127,13 +128,6 @@ class UserProjectSerializer(serializers.ModelSerializer):
         fields = ("take_time","member_id","project_id",)
 
 
-class UserProjectDetailSerializer(serializers.ModelSerializer):
-    member=UserRegSerializer()
-
-    class Meta:
-        model = UserProject
-        fields = ("member","project","take_time",)
-
 
 class ProjectCreateSerializer(serializers.ModelSerializer):
     sponsor = serializers.HiddenField(
@@ -153,6 +147,17 @@ class ProjectSerializer(serializers.ModelSerializer):
     class Meta:
         model = Project
         fields = ("id","title","desc","sponsor",)
+
+
+class UserProjectDetailSerializer(serializers.ModelSerializer):
+    member=UserRegSerializer()
+    project=ProjectSerializer()
+
+    class Meta:
+        model = UserProject
+        fields = ("member","project","take_time",)
+
+
 
 
 class ProjectDetailSerializer(serializers.ModelSerializer):

@@ -27,6 +27,7 @@ discussionRouter.register(r'reply', projectView.DiscussionReplyViewSet)
 
 urlpatterns = [
     url(r'^getid/$', userView.getMyId.as_view()),     #获取用户id
+    url(r'^upload/$',projectView.FileUploadView.as_view()),     #获取用户id
     url(r'^signin/', authviews.obtain_auth_token),
     url(r'^', include(router.urls)),
     url(r'^project/(?P<project_id>\d+)/', include(projectRouter.urls)),

@@ -5,6 +5,7 @@ from rest_framework import viewsets
 from rest_framework import filters
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.authentication import TokenAuthentication,SessionAuthentication
+from rest_framework.parsers import FileUploadParser
 from rest_framework.permissions import IsAdminUser
 from rest_framework.permissions import IsAuthenticated
 
@@ -13,13 +14,16 @@ from rest_framework.viewsets import GenericViewSet
 from .models import *
 from .serializers import *
 from utils.permissions import ProjectPermission,TakePartInPermission
+from .filters import *
+from rest_framework.views import APIView
+from rest_framework.response import Response
 
 # Task  Discussion  Reply
 
 class DiscussionReplyViewSet(viewsets.ModelViewSet):
     queryset = Reply.objects.all()
     authentication_classes = (TokenAuthentication, SessionAuthentication,)
-    permission_classes = (ProjectPermission,)
+    # permission_classes = (ProjectPermission,)
 
     def get_queryset(self):
         discussion_id = self.kwargs['discussion_id']
@@ -38,7 +42,7 @@ class ProjectTaskViewSet(viewsets.ModelViewSet):
 
     queryset = Task.objects.all()
     authentication_classes = (TokenAuthentication,SessionAuthentication,)
-    permission_classes = (ProjectPermission,)
+    # permission_classes = (ProjectPermission,)
 
     def get_queryset(self):
         project_id = self.kwargs['project_id']
@@ -127,8 +131,9 @@ class UserProjectViewset(viewsets.ModelViewSet):
     queryset = UserProject.objects.all()
     authentication_classes = (TokenAuthentication,)
     filter_backends = (DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter)
-    # filter_fields = ("project_id","member_id",)
-    search_fields = ("member_id","project_id")
+    filter_class = UserProjectFilter
+    # filter_fields = ("projectid","memberid",)
+    # search_fields = ("member_id","project_id")
 
     def get_serializer_class(self):
         if self.action == "create" or self.action == "update":
@@ -142,7 +147,7 @@ class ProjectViewSet(viewsets.ModelViewSet):
     """
     queryset = Project.objects.all()
     authentication_classes = (TokenAuthentication,)
-    # permission_classes = (ProjectPermission,)
+    permission_classes = (ProjectPermission,)
     filter_backends = (DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter)
     filter_fields = ("sponsor__id",)
     ordering_fields = ('create_time',)
@@ -158,6 +163,7 @@ class ProjectViewSet(viewsets.ModelViewSet):
 
     def perform_create(self, serializer):
         project = serializer.save()
+        # project.members
         sponsor = project.sponsor
         eUserProject = UserProject()
         eUserProject.member=sponsor
@@ -165,4 +171,12 @@ class ProjectViewSet(viewsets.ModelViewSet):
         eUserProject.save()
 
 
+class FileUploadView(APIView):
+    parser_classes = (FileUploadParser,)
+
+    def post(self, request, filename, format=None):
+        # file_obj = request.FILES['file']
+        print(request)
+        print(request.FILES)
+        return Response(status=204)
 

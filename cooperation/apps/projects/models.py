@@ -36,6 +36,7 @@ class UserProject(models.Model):
 
 class Task(models.Model):
     title = models.TextField(verbose_name=u"任务名称")
+    desc = models.TextField(verbose_name=u"任务描述",default="")
     project_belong_to = models.ForeignKey(Project, verbose_name=u"所属项目")
     sponsor = models.ForeignKey(UserProfile, related_name='sponsor', verbose_name=u"发起者")
     receiver = models.ForeignKey(UserProfile, related_name='receiver', verbose_name=u"接收者")
